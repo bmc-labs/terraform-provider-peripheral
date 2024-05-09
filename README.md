@@ -3,13 +3,13 @@
 <img src="./assets/peripheral-banner-1024px.jpg" />
 <br/>
 
-<h1><img src="./assets/terraform.svg" width="24" /> `terraform-provider-peripheral`</h1>
+# `terraform-provider-peripheral`
 
 **Manage GitLab Runners in Docker via Terraform**
 
 </div>
 
-This is the official Terraform provider for Peripheral. The provider allows you to manage Peripheral
+This is the official Terraform provider for peripheral. The provider allows you to manage Peripheral
 resources using Terraform. The provider is currently in alpha and is under active development.
 
 The main resource currently manageable using this provider are GitLab Runners, and it interacts with
