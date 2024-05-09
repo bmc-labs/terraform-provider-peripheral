@@ -1,57 +1,51 @@
-# Terraform Provider Scaffolding (Terraform Plugin Framework)
+<div align="center">
 
-_This template repository is built on the [Terraform Plugin Framework](https://github.com/hashicorp/terraform-plugin-framework). The template repository built on the [Terraform Plugin SDK](https://github.com/hashicorp/terraform-plugin-sdk) can be found at [terraform-provider-scaffolding](https://github.com/hashicorp/terraform-provider-scaffolding). See [Which SDK Should I Use?](https://developer.hashicorp.com/terraform/plugin/framework-benefits) in the Terraform documentation for additional information._
+<img src="./assets/peripheral-banner-1024px.jpg" />
+<br/>
 
-This repository is a *template* for a [Terraform](https://www.terraform.io) provider. It is intended as a starting point for creating Terraform providers, containing:
+<h1><img src="./assets/terraform.svg" width="24" /> `terraform-provider-peripheral`</h1>
 
-- A resource and a data source (`internal/provider/`),
-- Examples (`examples/`) and generated documentation (`docs/`),
-- Miscellaneous meta files.
+**Manage GitLab Runners in Docker via Terraform**
 
-These files contain boilerplate code that you will need to edit to create your own Terraform provider. Tutorials for creating Terraform providers can be found on the [HashiCorp Developer](https://developer.hashicorp.com/terraform/tutorials/providers-plugin-framework) platform. _Terraform Plugin Framework specific guides are titled accordingly._
+</div>
 
-Please see the [GitHub template repository documentation](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-from-a-template) for how to create a new repository from this template on GitHub.
+This is the official Terraform provider for Peripheral. The provider allows you to manage Peripheral
+resources using Terraform. The provider is currently in alpha and is under active development.
 
-Once you've written your provider, you'll want to [publish it on the Terraform Registry](https://developer.hashicorp.com/terraform/registry/providers/publishing) so that others can use it.
+The main resource currently manageable using this provider are GitLab Runners, and it interacts with
+[`runrs`](https://github.com/bmc-labs/runrs) to manage them. It therefore enables you to manage
+GitLab Runners entirely through Terraform.
 
-## Requirements
+## Using the Provider
 
-- [Terraform](https://developer.hashicorp.com/terraform/downloads) >= 1.0
-- [Go](https://golang.org/doc/install) >= 1.21
+As a prerequisite, you'll need to be running `runrs` on your server running Docker or inside of your
+Docker instance. Then, to use the provider, you need to add it to your Terraform configuration.
 
-## Building The Provider
+Your resulting Terraform code is going to look liket his:
 
-1. Clone the repository
-1. Enter the repository directory
-1. Build the provider using the Go `install` command:
+```hcl
+provider "peripheral" {
+  url = "http://localhost:8080"
+}
 
-```shell
-go install
+resource "peripheral_runner" "runner" {
+  id = 42
+  url = "https://gitlab.com"
+  token = "glpat-1234567890abcdef"
+  description = "my-runner"
+  image = "alpine:latest"
+  tag_list = "tag1,tag2"
+  run_untagged = false
+}
 ```
-
-## Adding Dependencies
-
-This provider uses [Go modules](https://github.com/golang/go/wiki/Modules).
-Please see the Go documentation for the most up to date information about using Go modules.
-
-To add a new dependency `github.com/author/dependency` to your Terraform provider:
-
-```shell
-go get github.com/author/dependency
-go mod tidy
-```
-
-Then commit the changes to `go.mod` and `go.sum`.
-
-## Using the provider
-
-Fill this in for each provider
 
 ## Developing the Provider
 
-If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (see [Requirements](#requirements) above).
+If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your
+machine (see [Requirements](#requirements) above).
 
-To compile the provider, run `go install`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
+To compile the provider, run `go install`. This will build the provider and put the provider binary
+in the `$GOPATH/bin` directory.
 
 To generate or update documentation, run `go generate`.
 
@@ -62,3 +56,15 @@ In order to run the full suite of Acceptance tests, run `make testacc`.
 ```shell
 make testacc
 ```
+
+## Support
+
+This is an open source project, so there isn't support per se. If you open an issue in the
+repository, we'll try and help you, but no promises.
+
+---
+
+<div align="center">
+© Copyright 2024 <b>bmc::labs</b> GmbH. All rights reserved.<br />
+<em>solid engineering. sustainable code.</em>
+</div>
