@@ -1,3 +1,3 @@
-provider "scaffolding" {
+provider "peripheral" {
   # example configuration here
 }

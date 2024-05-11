@@ -1,4 +1,4 @@
-// Copyright (c) HashiCorp, Inc.
+// Copyright (c) bmc::labs GmbH
 // SPDX-License-Identifier: MPL-2.0
 
 package provider
@@ -17,16 +17,24 @@ func TestAccExampleResource(t *testing.T) {
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccExampleResourceConfig("one"),
+				Config: testAccExampleResourceConfig(42),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("scaffolding_example.test", "configurable_attribute", "one"),
-					resource.TestCheckResourceAttr("scaffolding_example.test", "defaulted", "example value when not configured"),
-					resource.TestCheckResourceAttr("scaffolding_example.test", "id", "example-id"),
+					resource.TestCheckResourceAttr(
+						"peripheral_runner.test",
+						"id",
+						"42",
+					),
+					resource.TestCheckResourceAttr(
+						"peripheral_runner.test",
+						"defaulted",
+						"example value when not configured",
+					),
+					resource.TestCheckResourceAttr("peripheral_runner.test", "id", "example-id"),
 				),
 			},
 			// ImportState testing
 			{
-				ResourceName:      "scaffolding_example.test",
+				ResourceName:      "peripheral_runner.test",
 				ImportState:       true,
 				ImportStateVerify: true,
 				// This is not normally necessary, but is here because this
@@ -37,9 +45,13 @@ func TestAccExampleResource(t *testing.T) {
 			},
 			// Update and Read testing
 			{
-				Config: testAccExampleResourceConfig("two"),
+				Config: testAccExampleResourceConfig(1337),
 				Check: resource.ComposeAggregateTestCheckFunc(
-					resource.TestCheckResourceAttr("scaffolding_example.test", "configurable_attribute", "two"),
+					resource.TestCheckResourceAttr(
+						"peripheral_runner.test",
+						"id",
+						"1337",
+					),
 				),
 			},
 			// Delete testing automatically occurs in TestCase
@@ -47,10 +59,16 @@ func TestAccExampleResource(t *testing.T) {
 	})
 }
 
-func testAccExampleResourceConfig(configurableAttribute string) string {
+func testAccExampleResourceConfig(id int64) string {
 	return fmt.Sprintf(`
-resource "scaffolding_example" "test" {
-  configurable_attribute = %[1]q
+resource "peripheral_runner" "test" {
+  id           = %d
+  url          = "https://gitlab.com"
+  token        = "glpat-1234567890abcdef"
+  description  = "my-runner"
+  image        = "alpine:latest"
+  tag_list     = "tag1,tag2"
+  run_untagged = false
 }
-`, configurableAttribute)
+`, id)
 }
