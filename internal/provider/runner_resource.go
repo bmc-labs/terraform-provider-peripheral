@@ -19,7 +19,7 @@ import (
 
 // RunnerResourceModel describes the resource data model.
 type RunnerResourceModel struct {
-	Id          types.Int64  `tfsdk:"id"`
+	Id          types.String `tfsdk:"id"`
 	Url         types.String `tfsdk:"url"`
 	Token       types.String `tfsdk:"token"`
 	Description types.String `tfsdk:"description"`
@@ -31,7 +31,7 @@ type RunnerResourceModel struct {
 // FromRunner converts a Runner to a RunnerResourceModel.
 func FromRunner(runner *runrs.Runner) RunnerResourceModel {
 	return RunnerResourceModel{
-		Id:          types.Int64Value(runner.Id),
+		Id:          types.StringValue(runner.Id),
 		Url:         types.StringValue(runner.Url),
 		Token:       types.StringValue(runner.Token),
 		Description: types.StringValue(runner.Description),
@@ -44,7 +44,7 @@ func FromRunner(runner *runrs.Runner) RunnerResourceModel {
 // ToRunner converts a RunnerResourceModel to a Runner.
 func (m *RunnerResourceModel) ToRunner() runrs.Runner {
 	return runrs.Runner{
-		Id:          m.Id.ValueInt64(),
+		Id:          m.Id.ValueString(),
 		Url:         m.Url.ValueString(),
 		Token:       m.Token.ValueString(),
 		Description: m.Description.ValueString(),
@@ -88,7 +88,7 @@ func (r *RunnerResource) Schema(
 		MarkdownDescription: "Runner resource",
 
 		Attributes: map[string]schema.Attribute{
-			"id": schema.Int64Attribute{
+			"id": schema.StringAttribute{
 				MarkdownDescription: "Runner ID as provided by GitLab",
 				Required:            true,
 			},
@@ -179,7 +179,7 @@ func (r *RunnerResource) Create(
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
-	tflog.Trace(ctx, fmt.Sprintf("created Runner with ID %d", data.Id.ValueInt64()))
+	tflog.Trace(ctx, fmt.Sprintf("created Runner with ID %s", data.Id.ValueString()))
 
 	// Save data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -197,7 +197,7 @@ func (r *RunnerResource) Read(
 		return
 	}
 
-	clientResp, err := r.client.ReadWithResponse(ctx, data.Id.ValueInt64())
+	clientResp, err := r.client.ReadWithResponse(ctx, data.Id.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Client Error",
@@ -218,7 +218,7 @@ func (r *RunnerResource) Read(
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
-	tflog.Trace(ctx, fmt.Sprintf("read Runner with ID %d", data.Id.ValueInt64()))
+	tflog.Trace(ctx, fmt.Sprintf("read Runner with ID %s", data.Id.ValueString()))
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -260,7 +260,7 @@ func (r *RunnerResource) Update(
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
-	tflog.Trace(ctx, fmt.Sprintf("updated Runner with ID %d", runner.Id))
+	tflog.Trace(ctx, fmt.Sprintf("updated Runner with ID %s", runner.Id))
 
 	// Save updated data into Terraform state
 	resp.Diagnostics.Append(resp.State.Set(ctx, &data)...)
@@ -279,7 +279,7 @@ func (r *RunnerResource) Delete(
 		return
 	}
 
-	clientResp, err := r.client.DeleteWithResponse(ctx, data.Id.ValueInt64())
+	clientResp, err := r.client.DeleteWithResponse(ctx, data.Id.ValueString())
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Client Error",
@@ -298,7 +298,7 @@ func (r *RunnerResource) Delete(
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
-	tflog.Trace(ctx, fmt.Sprintf("deleted Runner with ID %d", data.Id.ValueInt64()))
+	tflog.Trace(ctx, fmt.Sprintf("deleted Runner with ID %s", data.Id.ValueString()))
 }
 
 func (r *RunnerResource) ImportState(
