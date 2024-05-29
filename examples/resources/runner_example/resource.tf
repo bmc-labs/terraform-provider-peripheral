@@ -11,7 +11,7 @@ provider "peripheral" {
   endpoint = "http://0.0.0.0:3000"
 }
 
-resource "peripheral_runner" "runner" {
+resource "peripheral_gitlab_runner" "gitlab_runner" {
   id           = "42"
   url          = "https://gitlab.com"
   token        = "glpat-1234567890abcdef"
@@ -21,6 +21,6 @@ resource "peripheral_runner" "runner" {
   run_untagged = false
 }
 
-output "runner" {
-  value = peripheral_runner.runner
+output "gitlab_runner" {
+  value = peripheral_gitlab_runner.gitlab_runner
 }

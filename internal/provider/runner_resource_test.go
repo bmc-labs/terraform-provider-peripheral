@@ -12,16 +12,17 @@ import (
 
 func testRunnerResourceConfig(description string) string {
 	return fmt.Sprintf(`
-resource "peripheral_runner" "test_runner" {
-  id           = "42"
-  url          = "https://gitlab.com"
-  token        = "glpat-1234567890abcdef"
-  description  = "%s"
-  image        = "alpine:latest"
-  tag_list     = "tag1,tag2"
-  run_untagged = false
-}
-`, description)
+		resource "peripheral_gitlab_runner" "test_runner" {
+		  id           = "42"
+		  url          = "https://gitlab.com"
+		  token        = "glpat-1234567890abcdef"
+		  description  = "%s"
+		  image        = "alpine:latest"
+		  tag_list     = "tag1,tag2"
+		  run_untagged = false
+		}`,
+		description,
+	)
 }
 
 func TestAccRunnerResource(t *testing.T) {
