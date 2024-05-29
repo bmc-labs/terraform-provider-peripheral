@@ -10,9 +10,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
+const resourceType = "peripheral_gitlab_runner"
+const resourceName = "test_runner"
+const resourceCoordinate = resourceType + "." + resourceName
+
 func testRunnerResourceConfig(description string) string {
 	return fmt.Sprintf(`
-		resource "peripheral_gitlab_runner" "test_runner" {
+		resource "%s" "%s" {
 		  id           = "42"
 		  url          = "https://gitlab.com"
 		  token        = "glpat-1234567890abcdef"
@@ -21,6 +25,8 @@ func testRunnerResourceConfig(description string) string {
 		  tag_list     = "tag1,tag2"
 		  run_untagged = false
 		}`,
+		resourceType,
+		resourceName,
 		description,
 	)
 }
@@ -35,37 +41,37 @@ func TestAccRunnerResource(t *testing.T) {
 				Config: providerConfig + testRunnerResourceConfig("my-runner"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"id",
 						"42",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"url",
 						"https://gitlab.com",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"token",
 						"glpat-1234567890abcdef",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"description",
 						"my-runner",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"image",
 						"alpine:latest",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"tag_list",
 						"tag1,tag2",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"run_untagged",
 						"false",
 					),
@@ -73,7 +79,7 @@ func TestAccRunnerResource(t *testing.T) {
 			},
 			// ImportState testing
 			{
-				ResourceName:      "peripheral_runner.test_runner",
+				ResourceName:      resourceCoordinate,
 				ImportState:       true,
 				ImportStateVerify: true,
 			},
@@ -82,37 +88,37 @@ func TestAccRunnerResource(t *testing.T) {
 				Config: providerConfig + testRunnerResourceConfig("updated-runner"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"id",
 						"42",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"url",
 						"https://gitlab.com",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"token",
 						"glpat-1234567890abcdef",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"description",
 						"updated-runner",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"image",
 						"alpine:latest",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"tag_list",
 						"tag1,tag2",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test_runner",
+						resourceCoordinate,
 						"run_untagged",
 						"false",
 					),

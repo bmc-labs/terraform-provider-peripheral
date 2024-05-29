@@ -11,15 +11,6 @@ import (
 )
 
 const providerConfig = `
-	terraform {
-	  required_providers {
-		peripheral = {
-		  source  = "peripheral-cloud/peripheral"
-		  version = "0.1.0"
-		}
-	  }
-	}
-
 	provider "peripheral" {
 		endpoint = "http://0.0.0.0:3000"
 	}
