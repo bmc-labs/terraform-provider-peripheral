@@ -36,6 +36,10 @@ jobs:
 
   generate:
     runs-on: ubuntu-latest
+    services:
+      runrs:
+        image: ghcr.io/bmc-labs/runrs:latest
+        ports: [ 3000:3000 ]
     steps:
       - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
       - uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v5.0.0
@@ -48,7 +52,10 @@ jobs:
         with:
           terraform_version: '1.8.0-alpha20240216'
           terraform_wrapper: false
-      - run: go generate ./...
+      - name: pull latest OpenAPI schema for runrs and generate code
+        run: |
+          curl -O http://0.0.0.0:3000/api-docs/runrs-api.json
+          go generate ./...
       - name: git diff
         run: |
           git diff --compact-summary --exit-code || \
@@ -59,6 +66,10 @@ jobs:
     name: Terraform Provider Acceptance Tests
     needs: build
     runs-on: ubuntu-latest
+    services:
+      runrs:
+        image: ghcr.io/bmc-labs/runrs:latest
+        ports: [ 3000:3000 ]
     timeout-minutes: 15
     strategy:
       fail-fast: false
