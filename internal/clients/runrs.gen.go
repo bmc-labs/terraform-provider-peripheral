@@ -39,8 +39,8 @@ type Error struct {
 // ErrorType defines model for ErrorType.
 type ErrorType string
 
-// Runner defines model for Runner.
-type Runner struct {
+// GitLabRunner defines model for GitLabRunner.
+type GitLabRunner struct {
 	Description string `json:"description"`
 	Id          string `json:"id"`
 	Image       string `json:"image"`
@@ -51,10 +51,10 @@ type Runner struct {
 }
 
 // CreateJSONRequestBody defines body for Create for application/json ContentType.
-type CreateJSONRequestBody = Runner
+type CreateJSONRequestBody = GitLabRunner
 
 // UpdateJSONRequestBody defines body for Update for application/json ContentType.
-type UpdateJSONRequestBody = Runner
+type UpdateJSONRequestBody = GitLabRunner
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -253,7 +253,7 @@ func NewCreateRequestWithBody(server string, contentType string, body io.Reader)
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners")
+	operationPath := fmt.Sprintf("/gitlab-runners")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -282,7 +282,7 @@ func NewListRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/list")
+	operationPath := fmt.Sprintf("/gitlab-runners/list")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -316,7 +316,7 @@ func NewDeleteRequest(server string, id string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/%s", pathParam0)
+	operationPath := fmt.Sprintf("/gitlab-runners/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -350,7 +350,7 @@ func NewReadRequest(server string, id string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/%s", pathParam0)
+	operationPath := fmt.Sprintf("/gitlab-runners/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -395,7 +395,7 @@ func NewUpdateRequestWithBody(server string, id string, contentType string, body
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/%s", pathParam0)
+	operationPath := fmt.Sprintf("/gitlab-runners/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -481,7 +481,7 @@ type ClientWithResponsesInterface interface {
 type CreateResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON201      *Runner
+	JSON201      *GitLabRunner
 	JSON400      *Error
 	JSON500      *Error
 }
@@ -505,7 +505,7 @@ func (r CreateResponse) StatusCode() int {
 type ListResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -529,7 +529,7 @@ func (r ListResponse) StatusCode() int {
 type DeleteResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -553,7 +553,7 @@ func (r DeleteResponse) StatusCode() int {
 type ReadResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -577,7 +577,7 @@ func (r ReadResponse) StatusCode() int {
 type UpdateResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -674,7 +674,7 @@ func ParseCreateResponse(rsp *http.Response) (*CreateResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -714,7 +714,7 @@ func ParseListResponse(rsp *http.Response) (*ListResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -754,7 +754,7 @@ func ParseDeleteResponse(rsp *http.Response) (*DeleteResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -794,7 +794,7 @@ func ParseReadResponse(rsp *http.Response) (*ReadResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -834,7 +834,7 @@ func ParseUpdateResponse(rsp *http.Response) (*UpdateResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
