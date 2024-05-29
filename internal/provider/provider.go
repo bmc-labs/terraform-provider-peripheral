@@ -92,7 +92,7 @@ func (p *peripheralProvider) Configure(
 
 func (p *peripheralProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
-		NewRunnerResource,
+		NewGitLabRunnerResource,
 	}
 }
 
