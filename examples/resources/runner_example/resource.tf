@@ -8,11 +8,11 @@ terraform {
 }
 
 provider "peripheral" {
-  endpoint = "http://127.0.0.1:3000"
+  endpoint = "http://0.0.0.0:3000"
 }
 
-resource "peripheral_runner" "runner" {
-  id           = 42
+resource "peripheral_gitlab_runner" "gitlab_runner" {
+  id           = "42"
   url          = "https://gitlab.com"
   token        = "glpat-1234567890abcdef"
   description  = "my-runner"
@@ -21,6 +21,6 @@ resource "peripheral_runner" "runner" {
   run_untagged = false
 }
 
-output "runner" {
-  value = peripheral_runner.runner
+output "gitlab_runner" {
+  value = peripheral_gitlab_runner.gitlab_runner
 }

@@ -39,10 +39,10 @@ type Error struct {
 // ErrorType defines model for ErrorType.
 type ErrorType string
 
-// Runner defines model for Runner.
-type Runner struct {
+// GitLabRunner defines model for GitLabRunner.
+type GitLabRunner struct {
 	Description string `json:"description"`
-	Id          int64  `json:"id"`
+	Id          string `json:"id"`
 	Image       string `json:"image"`
 	RunUntagged bool   `json:"run_untagged"`
 	TagList     string `json:"tag_list"`
@@ -51,10 +51,10 @@ type Runner struct {
 }
 
 // CreateJSONRequestBody defines body for Create for application/json ContentType.
-type CreateJSONRequestBody = Runner
+type CreateJSONRequestBody = GitLabRunner
 
 // UpdateJSONRequestBody defines body for Update for application/json ContentType.
-type UpdateJSONRequestBody = Runner
+type UpdateJSONRequestBody = GitLabRunner
 
 // RequestEditorFn  is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -138,15 +138,15 @@ type ClientInterface interface {
 	List(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// Delete request
-	Delete(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+	Delete(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// Read request
-	Read(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*http.Response, error)
+	Read(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// UpdateWithBody request with any body
-	UpdateWithBody(ctx context.Context, id int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+	UpdateWithBody(ctx context.Context, id string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	Update(ctx context.Context, id int64, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+	Update(ctx context.Context, id string, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 func (c *Client) CreateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -185,7 +185,7 @@ func (c *Client) List(ctx context.Context, reqEditors ...RequestEditorFn) (*http
 	return c.Client.Do(req)
 }
 
-func (c *Client) Delete(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+func (c *Client) Delete(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteRequest(c.Server, id)
 	if err != nil {
 		return nil, err
@@ -197,7 +197,7 @@ func (c *Client) Delete(ctx context.Context, id int64, reqEditors ...RequestEdit
 	return c.Client.Do(req)
 }
 
-func (c *Client) Read(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*http.Response, error) {
+func (c *Client) Read(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewReadRequest(c.Server, id)
 	if err != nil {
 		return nil, err
@@ -209,7 +209,7 @@ func (c *Client) Read(ctx context.Context, id int64, reqEditors ...RequestEditor
 	return c.Client.Do(req)
 }
 
-func (c *Client) UpdateWithBody(ctx context.Context, id int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+func (c *Client) UpdateWithBody(ctx context.Context, id string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateRequestWithBody(c.Server, id, contentType, body)
 	if err != nil {
 		return nil, err
@@ -221,7 +221,7 @@ func (c *Client) UpdateWithBody(ctx context.Context, id int64, contentType strin
 	return c.Client.Do(req)
 }
 
-func (c *Client) Update(ctx context.Context, id int64, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+func (c *Client) Update(ctx context.Context, id string, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateRequest(c.Server, id, body)
 	if err != nil {
 		return nil, err
@@ -253,7 +253,7 @@ func NewCreateRequestWithBody(server string, contentType string, body io.Reader)
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners")
+	operationPath := fmt.Sprintf("/gitlab-runners")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -282,7 +282,7 @@ func NewListRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/list")
+	operationPath := fmt.Sprintf("/gitlab-runners/list")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -301,7 +301,7 @@ func NewListRequest(server string) (*http.Request, error) {
 }
 
 // NewDeleteRequest generates requests for Delete
-func NewDeleteRequest(server string, id int64) (*http.Request, error) {
+func NewDeleteRequest(server string, id string) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -316,7 +316,7 @@ func NewDeleteRequest(server string, id int64) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/%s", pathParam0)
+	operationPath := fmt.Sprintf("/gitlab-runners/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -335,7 +335,7 @@ func NewDeleteRequest(server string, id int64) (*http.Request, error) {
 }
 
 // NewReadRequest generates requests for Read
-func NewReadRequest(server string, id int64) (*http.Request, error) {
+func NewReadRequest(server string, id string) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -350,7 +350,7 @@ func NewReadRequest(server string, id int64) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/%s", pathParam0)
+	operationPath := fmt.Sprintf("/gitlab-runners/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -369,7 +369,7 @@ func NewReadRequest(server string, id int64) (*http.Request, error) {
 }
 
 // NewUpdateRequest calls the generic Update builder with application/json body
-func NewUpdateRequest(server string, id int64, body UpdateJSONRequestBody) (*http.Request, error) {
+func NewUpdateRequest(server string, id string, body UpdateJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
 	buf, err := json.Marshal(body)
 	if err != nil {
@@ -380,7 +380,7 @@ func NewUpdateRequest(server string, id int64, body UpdateJSONRequestBody) (*htt
 }
 
 // NewUpdateRequestWithBody generates requests for Update with any type of body
-func NewUpdateRequestWithBody(server string, id int64, contentType string, body io.Reader) (*http.Request, error) {
+func NewUpdateRequestWithBody(server string, id string, contentType string, body io.Reader) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -395,7 +395,7 @@ func NewUpdateRequestWithBody(server string, id int64, contentType string, body 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/runners/%s", pathParam0)
+	operationPath := fmt.Sprintf("/gitlab-runners/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -467,21 +467,21 @@ type ClientWithResponsesInterface interface {
 	ListWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListResponse, error)
 
 	// DeleteWithResponse request
-	DeleteWithResponse(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*DeleteResponse, error)
+	DeleteWithResponse(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*DeleteResponse, error)
 
 	// ReadWithResponse request
-	ReadWithResponse(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*ReadResponse, error)
+	ReadWithResponse(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*ReadResponse, error)
 
 	// UpdateWithBodyWithResponse request with any body
-	UpdateWithBodyWithResponse(ctx context.Context, id int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateResponse, error)
+	UpdateWithBodyWithResponse(ctx context.Context, id string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateResponse, error)
 
-	UpdateWithResponse(ctx context.Context, id int64, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateResponse, error)
+	UpdateWithResponse(ctx context.Context, id string, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateResponse, error)
 }
 
 type CreateResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON201      *Runner
+	JSON201      *GitLabRunner
 	JSON400      *Error
 	JSON500      *Error
 }
@@ -505,7 +505,7 @@ func (r CreateResponse) StatusCode() int {
 type ListResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -529,7 +529,7 @@ func (r ListResponse) StatusCode() int {
 type DeleteResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -553,7 +553,7 @@ func (r DeleteResponse) StatusCode() int {
 type ReadResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -577,7 +577,7 @@ func (r ReadResponse) StatusCode() int {
 type UpdateResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
-	JSON200      *Runner
+	JSON200      *GitLabRunner
 	JSON404      *Error
 	JSON500      *Error
 }
@@ -625,7 +625,7 @@ func (c *ClientWithResponses) ListWithResponse(ctx context.Context, reqEditors .
 }
 
 // DeleteWithResponse request returning *DeleteResponse
-func (c *ClientWithResponses) DeleteWithResponse(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*DeleteResponse, error) {
+func (c *ClientWithResponses) DeleteWithResponse(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*DeleteResponse, error) {
 	rsp, err := c.Delete(ctx, id, reqEditors...)
 	if err != nil {
 		return nil, err
@@ -634,7 +634,7 @@ func (c *ClientWithResponses) DeleteWithResponse(ctx context.Context, id int64, 
 }
 
 // ReadWithResponse request returning *ReadResponse
-func (c *ClientWithResponses) ReadWithResponse(ctx context.Context, id int64, reqEditors ...RequestEditorFn) (*ReadResponse, error) {
+func (c *ClientWithResponses) ReadWithResponse(ctx context.Context, id string, reqEditors ...RequestEditorFn) (*ReadResponse, error) {
 	rsp, err := c.Read(ctx, id, reqEditors...)
 	if err != nil {
 		return nil, err
@@ -643,7 +643,7 @@ func (c *ClientWithResponses) ReadWithResponse(ctx context.Context, id int64, re
 }
 
 // UpdateWithBodyWithResponse request with arbitrary body returning *UpdateResponse
-func (c *ClientWithResponses) UpdateWithBodyWithResponse(ctx context.Context, id int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateResponse, error) {
+func (c *ClientWithResponses) UpdateWithBodyWithResponse(ctx context.Context, id string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateResponse, error) {
 	rsp, err := c.UpdateWithBody(ctx, id, contentType, body, reqEditors...)
 	if err != nil {
 		return nil, err
@@ -651,7 +651,7 @@ func (c *ClientWithResponses) UpdateWithBodyWithResponse(ctx context.Context, id
 	return ParseUpdateResponse(rsp)
 }
 
-func (c *ClientWithResponses) UpdateWithResponse(ctx context.Context, id int64, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateResponse, error) {
+func (c *ClientWithResponses) UpdateWithResponse(ctx context.Context, id string, body UpdateJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateResponse, error) {
 	rsp, err := c.Update(ctx, id, body, reqEditors...)
 	if err != nil {
 		return nil, err
@@ -674,7 +674,7 @@ func ParseCreateResponse(rsp *http.Response) (*CreateResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -714,7 +714,7 @@ func ParseListResponse(rsp *http.Response) (*ListResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -754,7 +754,7 @@ func ParseDeleteResponse(rsp *http.Response) (*DeleteResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -794,7 +794,7 @@ func ParseReadResponse(rsp *http.Response) (*ReadResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -834,7 +834,7 @@ func ParseUpdateResponse(rsp *http.Response) (*UpdateResponse, error) {
 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest Runner
+		var dest GitLabRunner
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

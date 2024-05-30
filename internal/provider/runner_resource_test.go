@@ -10,65 +10,121 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-func TestAccExampleResource(t *testing.T) {
+const resourceType = "peripheral_gitlab_runner"
+const resourceName = "test_runner"
+const resourceCoordinate = resourceType + "." + resourceName
+
+func testRunnerResourceConfig(description string) string {
+	return fmt.Sprintf(`
+		resource "%s" "%s" {
+		  id           = "42"
+		  url          = "https://gitlab.com"
+		  token        = "glpat-1234567890abcdef"
+		  description  = "%s"
+		  image        = "alpine:latest"
+		  tag_list     = "tag1,tag2"
+		  run_untagged = false
+		}`,
+		resourceType,
+		resourceName,
+		description,
+	)
+}
+
+func TestAccRunnerResource(t *testing.T) {
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,
 		Steps: []resource.TestStep{
 			// Create and Read testing
 			{
-				Config: testAccExampleResourceConfig(42),
+				Config: providerConfig + testRunnerResourceConfig("my-runner"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test",
+						resourceCoordinate,
 						"id",
 						"42",
 					),
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test",
-						"defaulted",
-						"example value when not configured",
+						resourceCoordinate,
+						"url",
+						"https://gitlab.com",
 					),
-					resource.TestCheckResourceAttr("peripheral_runner.test", "id", "example-id"),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"token",
+						"glpat-1234567890abcdef",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"description",
+						"my-runner",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"image",
+						"alpine:latest",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"tag_list",
+						"tag1,tag2",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"run_untagged",
+						"false",
+					),
 				),
 			},
 			// ImportState testing
 			{
-				ResourceName:      "peripheral_runner.test",
+				ResourceName:      resourceCoordinate,
 				ImportState:       true,
 				ImportStateVerify: true,
-				// This is not normally necessary, but is here because this
-				// example code does not have an actual upstream service.
-				// Once the Read method is able to refresh information from
-				// the upstream service, this can be removed.
-				ImportStateVerifyIgnore: []string{"configurable_attribute", "defaulted"},
 			},
 			// Update and Read testing
 			{
-				Config: testAccExampleResourceConfig(1337),
+				Config: providerConfig + testRunnerResourceConfig("updated-runner"),
 				Check: resource.ComposeAggregateTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"peripheral_runner.test",
+						resourceCoordinate,
 						"id",
-						"1337",
+						"42",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"url",
+						"https://gitlab.com",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"token",
+						"glpat-1234567890abcdef",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"description",
+						"updated-runner",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"image",
+						"alpine:latest",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"tag_list",
+						"tag1,tag2",
+					),
+					resource.TestCheckResourceAttr(
+						resourceCoordinate,
+						"run_untagged",
+						"false",
 					),
 				),
 			},
 			// Delete testing automatically occurs in TestCase
 		},
 	})
-}
-
-func testAccExampleResourceConfig(id int64) string {
-	return fmt.Sprintf(`
-resource "peripheral_runner" "test" {
-  id           = %d
-  url          = "https://gitlab.com"
-  token        = "glpat-1234567890abcdef"
-  description  = "my-runner"
-  image        = "alpine:latest"
-  tag_list     = "tag1,tag2"
-  run_untagged = false
-}
-`, id)
 }
