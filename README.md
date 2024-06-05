@@ -34,7 +34,7 @@ variable "peripheral_token" {
 }
 
 provider "peripheral" {
-  endpoint = "http://localhost:8080"
+  endpoint = "http://0.0.0.0:3000"
   token    = var.peripheral_token
 }
 
