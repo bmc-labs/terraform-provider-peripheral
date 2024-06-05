@@ -16,6 +16,10 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+const (
+	Api_tokenScopes = "api_token.Scopes"
+)
+
 // Defines values for ErrorType.
 const (
 	AlreadyExists    ErrorType = "AlreadyExists"

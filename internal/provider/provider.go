@@ -7,7 +7,10 @@ import (
 	"context"
 	"fmt"
 	runrs "terraform-provider-peripheral/internal/clients"
+	"time"
 
+	"github.com/deepmap/oapi-codegen/v2/pkg/securityprovider"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
@@ -31,6 +34,7 @@ type peripheralProvider struct {
 // peripheralProviderModel describes the provider data model.
 type peripheralProviderModel struct {
 	Endpoint types.String `tfsdk:"endpoint"`
+	Token    types.String `tfsdk:"token"`
 }
 
 func (p *peripheralProvider) Metadata(
@@ -50,8 +54,12 @@ func (p *peripheralProvider) Schema(
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"endpoint": schema.StringAttribute{
-				MarkdownDescription: "peripheral provider attribute",
-				Optional:            true,
+				MarkdownDescription: "URL for the peripheral API.",
+				Required:            true,
+			},
+			"token": schema.StringAttribute{
+				MarkdownDescription: "Access token for peripheral.",
+				Required:            true,
 			},
 		},
 	}
@@ -69,15 +77,33 @@ func (p *peripheralProvider) Configure(
 		return
 	}
 
-	if data.Endpoint.IsNull() {
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"iss": "peripheral",
+		"exp": time.Now().Add(time.Hour).Unix(),
+	})
+
+	encodedToken, err := jwtToken.SignedString([]byte(data.Token.ValueString()))
+	if err != nil {
 		resp.Diagnostics.AddError(
-			"Missing Required Field",
-			"Field 'endpoint' is required",
+			"Token Encoding Error",
+			fmt.Sprintf("Failed to encode JWT token: %s", err),
 		)
 		return
 	}
 
-	client, err := runrs.NewClientWithResponses(data.Endpoint.ValueString())
+	bearerToken, err := securityprovider.NewSecurityProviderBearerToken(encodedToken)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Auth Setup Error",
+			fmt.Sprintf("Failed to set up auth: %s", err),
+		)
+		return
+	}
+
+	client, err := runrs.NewClientWithResponses(
+		data.Endpoint.ValueString(),
+		runrs.WithRequestEditorFn(bearerToken.Intercept),
+	)
 	if err != nil {
 		resp.Diagnostics.AddError(
 			"Client Setup Error",
