@@ -8,6 +8,7 @@ on:
     paths-ignore:
       - 'README.md'
   push:
+    branches: [ "trunk" ]
     paths-ignore:
       - 'README.md'
 
@@ -39,6 +40,8 @@ jobs:
     services:
       runrs:
         image: ghcr.io/bmc-labs/runrs:latest
+        env:
+          SECRET: ${{ secrets.RUNRS_SECRET }}
         ports:
           - 3000:3000
     steps:
@@ -55,8 +58,7 @@ jobs:
           terraform_wrapper: false
       - name: pull latest OpenAPI schema for runrs and generate code
         run: |
-          curl -O http://0.0.0.0:3000/api-docs/runrs-api.json
-          go generate ./...
+          curl -O http://0.0.0.0:3000/api-docs/runrs-api.json && go generate ./...
       - name: git diff
         run: |
           git diff --compact-summary --exit-code || \
@@ -70,6 +72,8 @@ jobs:
     services:
       runrs:
         image: ghcr.io/bmc-labs/runrs:latest
+        env:
+          SECRET: ${{ secrets.RUNRS_SECRET }}
         ports:
           - 3000:3000
     timeout-minutes: 15
