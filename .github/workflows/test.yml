@@ -8,6 +8,7 @@ on:
     paths-ignore:
       - 'README.md'
   push:
+    branches: [ "trunk" ]
     paths-ignore:
       - 'README.md'
 
