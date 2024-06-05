@@ -27,8 +27,15 @@ Docker instance. Then, to use the provider, you need to add it to your Terraform
 Your resulting Terraform code is going to look liket his:
 
 ```hcl
+# make sure you manage your token securely
+variable "peripheral_token" {
+  type      = string
+  sensitive = true
+}
+
 provider "peripheral" {
-  url = "http://localhost:8080"
+  endpoint = "http://localhost:8080"
+  token    = var.peripheral_token
 }
 
 resource "peripheral_runner" "runner" {
