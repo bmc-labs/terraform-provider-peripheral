@@ -72,6 +72,8 @@ jobs:
     services:
       runrs:
         image: ghcr.io/bmc-labs/runrs:latest
+        env:
+          SECRET: ${{ secrets.RUNRS_SECRET }}
         ports:
           - 3000:3000
     timeout-minutes: 15
