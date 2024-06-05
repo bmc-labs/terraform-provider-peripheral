@@ -4,7 +4,8 @@ go 1.21
 
 require (
 	github.com/deepmap/oapi-codegen/v2 v2.1.0
-	github.com/hashicorp/terraform-plugin-docs v0.19.3
+	github.com/golang-jwt/jwt/v5 v5.2.1
+	github.com/hashicorp/terraform-plugin-docs v0.19.4
 	github.com/hashicorp/terraform-plugin-framework v1.9.0
 	github.com/hashicorp/terraform-plugin-go v0.23.0
 	github.com/hashicorp/terraform-plugin-log v0.9.0
@@ -30,7 +31,6 @@ require (
 	github.com/getkin/kin-openapi v0.122.0 // indirect
 	github.com/go-openapi/jsonpointer v0.19.6 // indirect
 	github.com/go-openapi/swag v0.22.4 // indirect
-	github.com/golang-jwt/jwt/v5 v5.2.1 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
