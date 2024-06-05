@@ -13,6 +13,7 @@ import (
 const providerConfig = `
 	provider "peripheral" {
 		endpoint = "http://0.0.0.0:3000"
+		token = "warblgarbl"
 	}
 `
 
