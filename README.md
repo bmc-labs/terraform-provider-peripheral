@@ -7,8 +7,8 @@
 
 **Manage GitLab Runners in Docker via Terraform**
 
-[![build](https://github.com/bmc-labs/terraform-provider-peripheral/actions/workflows/test.yml/badge.svg)](https://github.com/bmc-labs/terraform-provider-peripheral/actions/workflows/test.yml)
-[![Static Badge](https://img.shields.io/badge/docs-latest-7B42BC?logo=terraform)](https://registry.terraform.io/providers/bmc-labs/peripheral/latest/docs)
+[![build badge](https://github.com/bmc-labs/terraform-provider-peripheral/actions/workflows/test.yml/badge.svg)](https://github.com/bmc-labs/terraform-provider-peripheral/actions/workflows/test.yml)
+[![docs badge](https://img.shields.io/badge/docs-latest-7B42BC?logo=terraform)](https://registry.terraform.io/providers/bmc-labs/peripheral/latest/docs)
 
 </div>
 
