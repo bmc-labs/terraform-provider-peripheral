@@ -17,13 +17,16 @@ GitLabRunner resource
 
 ### Required
 
-- `id` (String) GitLabRunner ID as provided by GitLab
-- `image` (String) Docker image for GitLabRunner
+- `docker_image` (String) Docker image for GitLabRunner
+- `id` (Number) GitLab Runner instance ID as provided by GitLab
 - `token` (String) Token for GitLabRunner registration
 - `url` (String) URL of GitLab instance for GitLabRunner
 
 ### Optional
 
-- `description` (String) Description of GitLabRunner
-- `run_untagged` (Boolean) Allow untagged jobs
-- `tag_list` (String) Comma-separated list of tags for GitLabRunner
+- `name` (String) Description of GitLabRunner
+
+### Read-Only
+
+- `token_obtained_at` (String) Time when GitLabRunner token was obtained
+- `uuid` (String) UUID of GitLabRunner
