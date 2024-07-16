@@ -9,7 +9,6 @@ import (
 	runrs "terraform-provider-peripheral/internal/clients"
 	"time"
 
-	"github.com/oapi-codegen/oapi-codegen/v2/pkg/securityprovider"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/function"
@@ -17,6 +16,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/oapi-codegen/oapi-codegen/v2/pkg/securityprovider"
 )
 
 // Ensure peripheralProvider satisfies various provider interfaces.
