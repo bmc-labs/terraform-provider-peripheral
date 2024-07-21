@@ -24,7 +24,7 @@ func testRunnerResourceConfig(runnerName string) string {
 		  id           = 42
 		  name         = "%s"
 		  url          = "https://gitlab.com/"
-		  token        = "glrt-0123456789_abcdefXYZ"
+		  token        = "glrt-0123456789-abcdefXYZ"
 		  docker_image = "alpine:latest"
 		}`,
 		resourceType,
@@ -60,7 +60,7 @@ func TestAccRunnerResource(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						resourceCoordinate,
 						"token",
-						"glrt-0123456789_abcdefXYZ",
+						"glrt-0123456789-abcdefXYZ",
 					),
 					resource.TestCheckResourceAttr(
 						resourceCoordinate,
@@ -101,7 +101,7 @@ func TestAccRunnerResource(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						resourceCoordinate,
 						"token",
-						"glrt-0123456789_abcdefXYZ",
+						"glrt-0123456789-abcdefXYZ",
 					),
 					resource.TestCheckResourceAttr(
 						resourceCoordinate,

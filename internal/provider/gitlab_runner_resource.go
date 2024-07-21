@@ -6,15 +6,12 @@ package provider
 import (
 	"context"
 	"fmt"
-	"regexp"
 	"time"
 
 	uuidpkg "github.com/google/uuid"
-	"github.com/hashicorp/terraform-plugin-framework-validators/stringvalidator"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
-	"github.com/hashicorp/terraform-plugin-framework/schema/validator"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
 
@@ -121,23 +118,10 @@ func (r *GitLabRunnerResource) Schema(
 			"url": schema.StringAttribute{
 				MarkdownDescription: "URL of GitLab instance for GitLabRunner",
 				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(
-						regexp.MustCompile(`https?://.+/`),
-						"URL must start with 'http[s]://' and end with '/'",
-					),
-				},
 			},
 			"token": schema.StringAttribute{
 				MarkdownDescription: "Token for GitLabRunner registration",
 				Required:            true,
-				Validators: []validator.String{
-					stringvalidator.RegexMatches(
-						regexp.MustCompile(`^glrt-\w{20}$`),
-						"GitLab Runner Token must start with 'glrt-' "+
-							"followed by 20 alphanumeric characters",
-					),
-				},
 			},
 			"token_obtained_at": schema.StringAttribute{
 				MarkdownDescription: "Time when GitLabRunner token was obtained",
