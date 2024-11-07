@@ -68,8 +68,8 @@ type GitLabRunner struct {
 	// Name Runner name (default: Docker-style random name)
 	Name *string `json:"name,omitempty"`
 
-	// Token Runner token, obtained from the GitLab instance. Format: `glrt-` followed by 20 characters
-	// from the set `[0-9a-f_]`.
+	// Token Runner token, obtained from the GitLab instance. See [documentation of the `glrcfg`
+	// crate](https://docs.rs/glrcfg/latest/glrcfg/runner/struct.RunnerToken.html) for details.
 	Token           string     `json:"token"`
 	TokenObtainedAt *time.Time `json:"token_obtained_at,omitempty"`
 
